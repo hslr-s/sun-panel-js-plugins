@@ -34,6 +34,14 @@
   }
 
   function createDom() {
+    // 检测是否已经存在TOC DOM，存在则删除
+    (function () {
+      const element = document.getElementById(SunPanelTOCDomIdName)
+      if (element) {
+        element.remove()
+      }
+    })()
+
     const SunPanelTOCDom = document.createElement('div')
     SunPanelTOCDom.id = SunPanelTOCDomIdName
     document.body.appendChild(SunPanelTOCDom)
@@ -276,40 +284,44 @@
     sidebar.addEventListener('mouseenter', () => {
       showSidebar()
     })
-  }
 
-  // 检测是否已经存在TOC DOM，存在则删除
-  (function () {
-    const element = document.getElementById(SunPanelTOCDomIdName)
-    if (element) {
-      element.remove()
-    }
-  })()
-
-  // 执行创建DOM函数
-  document.addEventListener('DOMContentLoaded', createDom())
-
-  // 监听TOC点击事件
-  document.querySelectorAll('.title-bar-box').forEach((box) => {
-    box.addEventListener('click', function (event) {
+    // 监听TOC点击事件
+    document.querySelectorAll('.title-bar-box').forEach((box) => {
+      box.addEventListener('click', function (event) {
       // 检查触发事件的元素是否有 'data-groupClassName' 属性
-      if (this.dataset.groupClassName) {
+        if (this.dataset.groupClassName) {
         // 获取 'data-groupClass' 属性的值
-        const groupClassName = this.dataset.groupClassName
-        // 使用属性值作为选择器查询对应的元素
-        const targetElement = document.querySelector(`.${groupClassName}`)
-        if (targetElement) {
+          const groupClassName = this.dataset.groupClassName
+          // 使用属性值作为选择器查询对应的元素
+          const targetElement = document.querySelector(`.${groupClassName}`)
+          if (targetElement) {
           // 获取目标元素的 'top' 坐标
-          const targetTop = targetElement.offsetTop
-          const scrollContainerElement = document.querySelector(scrollContainerElementClassName)
-          if (scrollContainerElement) {
-            scrollContainerElement.scrollTo({
-              top: targetTop - scrollOffset,
-              behavior: 'smooth', // 平滑滚动
-            })
+            const targetTop = targetElement.offsetTop
+            const scrollContainerElement = document.querySelector(scrollContainerElementClassName)
+            if (scrollContainerElement) {
+              scrollContainerElement.scrollTo({
+                top: targetTop - scrollOffset,
+                behavior: 'smooth', // 平滑滚动
+              })
+            }
           }
         }
-      }
+      })
     })
-  })
+  }
+
+  // 判断是否已经存在分组，不存在将定时监听
+  const items = document.querySelectorAll('[class*="item-group-index-"]')
+  if (items.length > 0) {
+    createDom()
+    return
+  }
+
+  const interval = setInterval(() => {
+    const items = document.querySelectorAll('[class*="item-group-index-"]')
+    if (items.length > 0) {
+      createDom()
+      clearInterval(interval)
+    }
+  }, 1000)
 })()

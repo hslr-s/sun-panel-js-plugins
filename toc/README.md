@@ -2,7 +2,7 @@
 [Sun-Panel](https://sun-panel.top) JavaScript plugins.
 
 ## 说明
-提取所有分组作为侧边栏目录，点击可以快速跳转到指定分组。需要在 Sun-Panel `v1.5.2-beta24-08-09` 及以上版本。
+提取所有分组作为侧边栏目录，点击可以快速跳转到指定分组。需要在 Sun-Panel `v1.5.2-beta24-08-10` 及以上版本。
 
 ## 效果
 
